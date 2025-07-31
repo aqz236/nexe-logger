@@ -1,14 +1,14 @@
-# @hest/logger
+# @nexe/logger
 
 <div align="center">
 
-![HestJS Logger](https://img.shields.io/badge/HestJS-Logger-blue?style=for-the-badge&logo=typescript)
+![Nexe Logger](https://img.shields.io/badge/Nexe-Logger-blue?style=for-the-badge&logo=typescript)
 
-**A powerful, modern logging solution for HestJS framework based on Pino**
+**A powerful, modern logging solution for Nexe framework based on Pino**
 
-[![npm version](https://img.shields.io/npm/v/@hest/logger?style=flat-square)](https://www.npmjs.com/package/@hest/logger)
-[![downloads](https://img.shields.io/npm/dm/@hest/logger?style=flat-square)](https://www.npmjs.com/package/@hest/logger)
-[![license](https://img.shields.io/npm/l/@hest/logger?style=flat-square)](https://github.com/aqz236/hest-logger/blob/main/LICENSE)
+[![npm version](https://img.shields.io/npm/v/@nexe/logger?style=flat-square)](https://www.npmjs.com/package/@nexe/logger)
+[![downloads](https://img.shields.io/npm/dm/@nexe/logger?style=flat-square)](https://www.npmjs.com/package/@nexe/logger)
+[![license](https://img.shields.io/npm/l/@nexe/logger?style=flat-square)](https://github.com/aqz236/nexe-logger/blob/main/LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
 
 </div>
@@ -23,7 +23,7 @@
 - 🎯 **Context Support** - Add request IDs, user IDs, and custom context data
 - 🔄 **Multiple Transports** - Console, file, rotating files, and custom transports
 - 🛡️ **Security First** - Built-in redaction for sensitive information
-- 📦 **Framework Integration** - Seamlessly integrates with HestJS framework
+- 📦 **Framework Integration** - Seamlessly integrates with Nexe framework
 
 
 ![](assets/20250727_225757_image.png)
@@ -33,16 +33,16 @@
 
 ```bash
 # npm
-npm install @hest/logger
+npm install @nexe/logger
 
 # yarn
-yarn add @hest/logger
+yarn add @nexe/logger
 
 # pnpm
-pnpm add @hest/logger
+pnpm add @nexe/logger
 
 # bun
-bun add @hest/logger
+bun add @nexe/logger
 ```
 
 ## 🚀 Quick Start
@@ -50,7 +50,7 @@ bun add @hest/logger
 ### Basic Usage
 
 ```typescript
-import { createLogger, logger } from '@hest/logger';
+import { createLogger, logger } from '@nexe/logger';
 
 // Use global logger
 logger.info('Hello, World!');
@@ -61,24 +61,28 @@ const apiLogger = createLogger('API');
 apiLogger.info('API server started');
 ```
 
-### With HestJS Framework
+### With Nexe Framework
 
 ```typescript
-import { HestFactory, logger } from '@hest/core';
+import { Hono } from 'hono';
+import { createLogger } from '@nexe/logger';
 
-async function bootstrap() {
-  logger.info('🚀 Starting HestJS application...');
-  
-  const app = await HestFactory.create(AppModule);
-  
-  logger.info('✅ Application ready!');
-}
+const logger = createLogger('app');
+logger.info('🚀 Starting Nexe application...');
+
+const app = new Hono();
+app.get('/', (c) => {
+  return c.text('Hello Nexe!');
+});
+
+logger.info('✅ Application ready!');
+export default app;
 ```
 
 ### Advanced Configuration
 
 ```typescript
-import { createLogger, LogLevel } from '@hest/logger';
+import { createLogger, LogLevel } from '@nexe/logger';
 
 const customLogger = createLogger('MyService', {
   level: LogLevel.DEBUG,
@@ -117,7 +121,7 @@ const logger = createLogger('ServiceName', {
 Pre-configured global logger instance.
 
 ```typescript
-import { logger } from '@hest/logger';
+import { logger } from '@nexe/logger';
 
 logger.info('Global log message');
 ```
@@ -158,7 +162,7 @@ The logger automatically adapts based on `NODE_ENV`:
 ### Custom Configuration
 
 ```typescript
-import { createLogger, LogLevel } from '@hest/logger';
+import { createLogger, LogLevel } from '@nexe/logger';
 
 const logger = createLogger('MyApp', {
   level: LogLevel.INFO,
@@ -197,7 +201,7 @@ const logger = createLogger('MyApp', {
 ### Console Transport
 
 ```typescript
-import { createConsoleTransport } from '@hest/logger';
+import { createConsoleTransport } from '@nexe/logger';
 
 const transport = createConsoleTransport({
   colorize: true,
@@ -208,7 +212,7 @@ const transport = createConsoleTransport({
 ### File Transport
 
 ```typescript
-import { createFileTransport } from '@hest/logger';
+import { createFileTransport } from '@nexe/logger';
 
 const transport = createFileTransport({
   destination: './logs/app.log',
@@ -219,7 +223,7 @@ const transport = createFileTransport({
 ### Rotating Files
 
 ```typescript
-import { createRotatingFileTransport } from '@hest/logger';
+import { createRotatingFileTransport } from '@nexe/logger';
 
 const transport = createRotatingFileTransport({
   filename: './logs/app-%DATE%.log',
@@ -252,7 +256,7 @@ All serializers include error handling to prevent logging failures from crashing
 ## 🧪 Testing
 
 ```typescript
-import { createLogger, LogLevel } from '@hest/logger';
+import { createLogger, LogLevel } from '@nexe/logger';
 
 // Create test logger with minimal output
 const testLogger = createLogger('Test', {
@@ -262,7 +266,7 @@ const testLogger = createLogger('Test', {
 
 ## 📊 Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=aqz236/hest-logger&type=Date)](https://star-history.com/#aqz236/hest-logger&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=aqz236/nexe-logger&type=Date)](https://star-history.com/#aqz236/nexe-logger&Date)
 
 ## 📊 Performance
 
@@ -287,17 +291,17 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🔗 Links
 
-- [HestJS Framework](https://github.com/aqz236/hest)
+- [Nexe Framework](https://github.com/aqz236/nexe)
 - [Pino Logger](https://github.com/pinojs/pino)
-- [Documentation](https://github.com/aqz236/hest-logger/wiki)
-- [Issues](https://github.com/aqz236/hest-logger/issues)
+- [Documentation](https://github.com/aqz236/nexe-logger/wiki)
+- [Issues](https://github.com/aqz236/nexe-logger/issues)
 
 ---
 
 <div align="center">
 
-**Built with ❤️ for the HestJS ecosystem**
+**Built with ❤️ for the Nexe ecosystem**
 
-[⭐ Star us on GitHub](https://github.com/aqz236/hest-logger) • [📝 Report Bug](https://github.com/aqz236/hest-logger/issues) • [💡 Request Feature](https://github.com/aqz236/hest-logger/issues)
+[⭐ Star us on GitHub](https://github.com/aqz236/nexe-logger) • [📝 Report Bug](https://github.com/aqz236/nexe-logger/issues) • [💡 Request Feature](https://github.com/aqz236/nexe-logger/issues)
 
 </div>
