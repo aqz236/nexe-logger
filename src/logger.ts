@@ -57,6 +57,9 @@ export class HestLogger implements Logger {
           if (typeof arg === 'object' && arg !== null && !(arg instanceof Error)) {
             // 如果是普通对象，合并到日志对象中
             Object.assign(logObj, arg);
+          } else if (arg instanceof Error) {
+            // 如果是Error对象，添加到err字段让pino处理
+            logObj.err = arg;
           }
         }
       }
@@ -69,16 +72,39 @@ export class HestLogger implements Logger {
       for (const arg of args) {
         if (typeof arg === 'object' && arg !== null && !(arg instanceof Error)) {
           Object.assign(logObj, arg);
+        } else if (arg instanceof Error) {
+          // 如果是Error对象，添加到err字段让pino处理
+          logObj.err = arg;
         }
       }
-    } else {
-      // logger.info() - 没有参数，或者 obj 是其他类型（包括Error）
+    } else if (obj instanceof Error) {
+      // logger.info(error, 'message') - 错误在前，消息在后
+      logObj.err = obj;
       logMessage = message;
       
       // 处理额外参数中的普通对象
       for (const arg of args) {
         if (typeof arg === 'object' && arg !== null && !(arg instanceof Error)) {
           Object.assign(logObj, arg);
+        } else if (arg instanceof Error) {
+          // 多个错误对象的情况，可以用数组或者其他字段名
+          if (!logObj.additionalErrors) {
+            logObj.additionalErrors = [];
+          }
+          logObj.additionalErrors.push(arg);
+        }
+      }
+    } else {
+      // logger.info() - 没有参数，或者 obj 是其他类型
+      logMessage = message;
+      
+      // 处理额外参数中的普通对象
+      for (const arg of args) {
+        if (typeof arg === 'object' && arg !== null && !(arg instanceof Error)) {
+          Object.assign(logObj, arg);
+        } else if (arg instanceof Error) {
+          // 如果是Error对象，添加到err字段让pino处理
+          logObj.err = arg;
         }
       }
     }
@@ -106,19 +132,9 @@ export class HestLogger implements Logger {
   error(obj: object, message?: string, ...args: any[]): void;
   error(message: string, ...args: any[]): void;
   error(obj?: any, message?: any, ...args: any[]): void {
-    if (typeof obj === 'string' && message instanceof Error) {
-      // logger.error('message', error) - 消息在前，错误在后
-      // 直接让pino处理：传递Error对象作为合并对象，消息作为第二个参数
-      this._pino.error(message, obj);
-    } else if (obj instanceof Error) {
-      // logger.error(error, 'message') - 错误在前，消息在后
-      // 直接让pino处理：传递Error对象作为合并对象，消息作为第二个参数
-      this._pino.error(obj, message);
-    } else {
-      // 其他情况使用原来的方法
-      const [logObj, msg] = this.buildLogObject(obj, message, ...args);
-      this._pino.error(logObj, msg);
-    }
+    // 统一处理所有情况，避免错误对象重复处理
+    const [logObj, msg] = this.buildLogObject(obj, message, ...args);
+    this._pino.error(logObj, msg);
   }
 
   /**

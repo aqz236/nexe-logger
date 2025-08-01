@@ -81,11 +81,7 @@ export function getDefaultFormatters() {
   return {
     level: levelFormatter,
     bindings: bindingsFormatter,
-    log: (object: Record<string, any>) => {
-      // 组合多个格式化器
-      const formatted = logFormatter(object);
-      return errorFormatter(formatted);
-    },
+    log: logFormatter, // 直接使用logFormatter，不再使用errorFormatter
   };
 }
 
