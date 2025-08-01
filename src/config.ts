@@ -1,4 +1,4 @@
-import { LoggerConfig, LoggerEnvironment, LogLevel } from "./types";
+import { LoggerConfig, LogLevel } from "./types";
 
 /**
  * 默认日志配置
@@ -62,15 +62,14 @@ export function getEnvironmentConfig(env?: string): Partial<LoggerConfig> {
  * 从环境变量创建配置
  */
 export function createConfigFromEnv(): Partial<LoggerConfig> {
-  const env: LoggerEnvironment = process.env;
   const config: Partial<LoggerConfig> = {};
 
-  if (env.LOG_LEVEL) {
-    config.level = env.LOG_LEVEL as LogLevel;
+  if (process.env.LOG_LEVEL) {
+    config.level = process.env.LOG_LEVEL as LogLevel;
   }
 
-  if (env.LOG_NAME) {
-    config.name = env.LOG_NAME;
+  if (process.env.LOG_NAME) {
+    config.name = process.env.LOG_NAME;
   }
 
   return config;
