@@ -42,7 +42,7 @@ export class HestLogger implements Logger {
    */
   private buildLogObject(obj?: object | string, message?: string, ...args: any[]): [object, string | undefined] {
     const context = Object.keys(this._context).length > 0 ? this._context : undefined;
-    let logObj: any = { ...context };
+    let logObj: any = context ? { ...context } : {};
     let logMessage: string | undefined;
     
     if (typeof obj === 'string') {
@@ -142,7 +142,14 @@ export class HestLogger implements Logger {
   info(message: string, ...args: any[]): void;
   info(obj?: any, message?: any, ...args: any[]): void {
     const [logObj, msg] = this.buildLogObject(obj, message, ...args);
-    this._pino.info(logObj, msg);
+    
+    // 如果有对象数据，传递给 pino 作为第一个参数
+    if (logObj && Object.keys(logObj).length > 0) {
+      this._pino.info(logObj, msg);
+    } else {
+      // 只有消息，直接传递
+      this._pino.info(msg);
+    }
   }
 
   /**

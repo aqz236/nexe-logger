@@ -47,25 +47,7 @@ export function createLogger(
     const stream = pretty({
       levelFirst: false,
       colorize: true,
-      ignore: "pid,hostname,error", // 忽略重复的error字段，只显示err
       translateTime: "yy-mm-dd HH:MM:ss.l",
-      messageFormat: "{msg}",
-      customLevels: {
-        fatal: 60,
-        error: 50,
-        warn: 40,
-        info: 30,
-        debug: 20,
-        trace: 10,
-      },
-      customColors: {
-        60: "bgRed",
-        50: "red",
-        40: "yellow",
-        30: "green",
-        20: "blue",
-        10: "gray",
-      },
     });
 
     const pinoConfig = {
